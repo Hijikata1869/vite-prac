@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+export const App: React.FC = () => {
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <div>
+          <p>TODOを入力</p>
+          <form>
+            <input type="text" />
+            <button>追加</button>
+          </form>
+        </div>
+        <div>
+          <p>未完了のTODOリスト</p>
+          <ul>
+            <li>
+              <div>
+                <p>未完了のTODO</p>
+                <button>完了</button>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p>未完了のTODO</p>
+                <button>完了</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <p>完了したTODO</p>
+          <ul>
+            <li>
+              <div>
+                <p>完了したTODO</p>
+                <button>戻す</button>
+                <button>削除</button>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
-}
-
-export default App
+  );
+};
