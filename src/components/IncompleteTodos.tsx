@@ -26,7 +26,7 @@ export const IncompleteTodos: React.FC<TodoListProps> = ({
   };
 
   return (
-    <div className="flex flex-col p-4 bg-red-300 min-h-[300px]">
+    <div className="flex flex-col p-4 bg-red-300 min-h-[200px]">
       <p className="pb-4 text-gray-700 text-center">未完了のTODOリスト</p>
       <ul className="flex flex-col pl-6">
         {incompleteTodos.map((todo, index) => {

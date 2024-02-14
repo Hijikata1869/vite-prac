@@ -18,7 +18,7 @@ export const CompleteTodos: React.FC<TodoListProps> = ({
   };
 
   return (
-    <div className="flex flex-col p-4 bg-green-300 min-h-[300px]">
+    <div className="flex flex-col p-4 bg-green-300 min-h-[200px]">
       <p className="pb-4 text-gray-700 text-center">完了したTODO</p>
       <ul className="flex flex-col pl-6">
         {completeTodos.map((todo, index) => {
