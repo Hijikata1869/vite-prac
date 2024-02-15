@@ -1,7 +1,9 @@
+import { Todo } from "../types/Todo";
+
 interface TodoListProps {
-  completeTodos: string[];
-  incompleteTodos: string[];
-  setIncompleteTodos: React.Dispatch<React.SetStateAction<string[]>>;
+  completeTodos: Todo[];
+  incompleteTodos: Todo[];
+  setIncompleteTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 export const CompleteTodos: React.FC<TodoListProps> = ({
@@ -25,7 +27,7 @@ export const CompleteTodos: React.FC<TodoListProps> = ({
           return (
             <li key={index} className="list-disc mb-4">
               <div className="flex">
-                <p>{todo}</p>
+                <p>{todo.todo}</p>
                 <button
                   onClick={(event) => onClickBack(event, index)}
                   className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"

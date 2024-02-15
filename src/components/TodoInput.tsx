@@ -1,8 +1,12 @@
+import { Todo } from "../types/Todo";
+
+import { createTodo, fetchTodos } from "../apis/todos";
+
 interface TodoListProps {
   todo: string;
   setTodo: React.Dispatch<React.SetStateAction<string>>;
-  incompleteTodos: string[];
-  setIncompleteTodos: React.Dispatch<React.SetStateAction<string[]>>;
+  incompleteTodos: Todo[];
+  setIncompleteTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 export const TodoInput: React.FC<TodoListProps> = ({
@@ -15,10 +19,17 @@ export const TodoInput: React.FC<TodoListProps> = ({
     setTodo(event.target.value);
   };
 
-  const onClickAdd = (event: React.MouseEvent) => {
-    event.preventDefault();
-    const newTodos = [...incompleteTodos, todo];
-    setIncompleteTodos(newTodos);
+  const onClickAdd = () => {
+    createTodo(todo).then((res) => {
+      if (res.status === 200) {
+        fetchTodos().then((res) => {
+          const newCreatedTodo = res.todos.slice(-1)[0];
+          const newIncompleteTodos = [...incompleteTodos, newCreatedTodo];
+          setIncompleteTodos(newIncompleteTodos);
+        });
+      }
+    });
+
     setTodo("");
   };
 
@@ -33,7 +44,7 @@ export const TodoInput: React.FC<TodoListProps> = ({
           className="rounded-md mb-6 w-80 outline-none"
         />
         <button
-          onClick={(event) => onClickAdd(event)}
+          onClick={onClickAdd}
           className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"
         >
           追加

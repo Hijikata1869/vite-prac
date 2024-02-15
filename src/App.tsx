@@ -4,10 +4,12 @@ import { TodoInput } from "./components/TodoInput";
 import { IncompleteTodos } from "./components/IncompleteTodos";
 import { CompleteTodos } from "./components/CompleteTodos";
 
+import { Todo } from "./types/Todo";
+
 export const App: React.FC = () => {
-  const [todo, setTodo] = useState("");
-  const [incompleteTodos, setIncompleteTodos] = useState<string[]>([]);
-  const [completeTodos, setCompleteTodos] = useState<string[]>([]);
+  const [todo, setTodo] = useState<string>("");
+  const [incompleteTodos, setIncompleteTodos] = useState<Todo[]>([]);
+  const [completeTodos, setCompleteTodos] = useState<Todo[]>([]);
 
   return (
     <>

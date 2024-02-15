@@ -1,49 +1,47 @@
+import { useEffect, useState } from "react";
+
+import { fetchTodos } from "../apis/todos";
+
+import { Todo } from "../types/Todo";
+
 interface TodoListProps {
-  incompleteTodos: string[];
-  completeTodos: string[];
-  setCompleteTodos: React.Dispatch<React.SetStateAction<string[]>>;
-  setIncompleteTodos: React.Dispatch<React.SetStateAction<string[]>>;
+  incompleteTodos: Todo[];
+  completeTodos: Todo[];
+  setCompleteTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  setIncompleteTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-export const IncompleteTodos: React.FC<TodoListProps> = ({
-  incompleteTodos,
-  completeTodos,
-  setCompleteTodos,
-  setIncompleteTodos,
-}) => {
-  const onClickComplete = (event: React.MouseEvent, index: number) => {
+export const IncompleteTodos: React.FC<TodoListProps> = () => {
+  const [todo, setTodo] = useState<Todo[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchTodos().then((data) => {
+        return data;
+      });
+      setTodo(result.todos);
+    };
+    fetchData();
+  }, []);
+  const onClickComplete = (event: React.MouseEvent) => {
     event.preventDefault();
-    const targetTodo = incompleteTodos.splice(index, 1);
-    const newCompleteTodos = [...completeTodos, targetTodo.toString()];
-    setCompleteTodos(newCompleteTodos);
-  };
-
-  const onClickDelete = (event: React.MouseEvent, index: number) => {
-    event.preventDefault();
-    incompleteTodos.splice(index, 1);
-    const newIncompleteTodos = [...incompleteTodos];
-    setIncompleteTodos(newIncompleteTodos);
   };
 
   return (
     <div className="flex flex-col p-4 bg-red-300 min-h-[200px]">
       <p className="pb-4 text-gray-700 text-center">未完了のTODOリスト</p>
       <ul className="flex flex-col pl-6">
-        {incompleteTodos.map((todo, index) => {
+        {todo.map((todo) => {
           return (
-            <li key={index} className="list-disc mb-4">
+            <li key={todo.id} className="list-disc mb-4">
               <div className="flex">
-                <p>{todo}</p>
+                <p>{todo.todo}</p>
                 <button
-                  onClick={(event) => onClickComplete(event, index)}
+                  onClick={(event) => onClickComplete(event)}
                   className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"
                 >
                   完了
                 </button>
-                <button
-                  onClick={(event) => onClickDelete(event, index)}
-                  className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"
-                >
+                <button className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400">
                   削除
                 </button>
               </div>
