@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 // apis
-import { fetchTodos, toggleTodoCompleted } from "./apis/todos";
+import {
+  fetchTodos,
+  toggleTodoCompleted,
+  createTodo,
+  deleteTodo,
+} from "./apis/todos";
 
 // types
 import { Todo } from "./types/Todo";
 
 export const App: React.FC = () => {
+  const [inputTodo, setInputTodo] = useState("");
   const [incompleteTodos, setIncompleteTodos] = useState<Todo[]>([]);
   const [completeTodos, setCompleteTodos] = useState<Todo[]>([]);
 
@@ -23,6 +29,21 @@ export const App: React.FC = () => {
       });
   }, []);
 
+  const onChangeTodoText = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTodo(event.target.value);
+  };
+
+  const onClickAdd = (event: React.MouseEvent) => {
+    event.preventDefault();
+    createTodo(inputTodo).then((res) => {
+      if (res.status === 200) {
+        const newIncompleteTodos = [...incompleteTodos, res.data.createdTodo];
+        setIncompleteTodos(newIncompleteTodos);
+        setInputTodo("");
+      }
+    });
+  };
+
   const onClickComplete = (event: React.MouseEvent, index: number) => {
     event.preventDefault();
     const targetIncompleteTodo = incompleteTodos[index];
@@ -32,6 +53,18 @@ export const App: React.FC = () => {
         newIncompleteTodos.splice(index, 1);
         setIncompleteTodos(newIncompleteTodos);
         setCompleteTodos([...completeTodos, targetIncompleteTodo]);
+      }
+    });
+  };
+
+  const onClickDelete = (event: React.MouseEvent, index: number) => {
+    event.preventDefault();
+    const targetIncompleteTodo = incompleteTodos[index];
+    deleteTodo(targetIncompleteTodo.id).then((res) => {
+      if (res.status === 200) {
+        const newIncompleteTodos = [...incompleteTodos];
+        newIncompleteTodos.splice(index, 1);
+        setIncompleteTodos(newIncompleteTodos);
       }
     });
   };
@@ -55,8 +88,16 @@ export const App: React.FC = () => {
         <div className="flex flex-col justify-center items-center p-4 bg-blue-300">
           <p className="pb-2 text-gray-700">TODOを入力</p>
           <form>
-            <input type="text" className="rounded-md mb-6 w-80 outline-none" />
-            <button className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400">
+            <input
+              type="text"
+              className="rounded-md mb-6 w-80 outline-none"
+              value={inputTodo}
+              onChange={onChangeTodoText}
+            />
+            <button
+              className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"
+              onClick={(event) => onClickAdd(event)}
+            >
               追加
             </button>
           </form>
@@ -75,7 +116,10 @@ export const App: React.FC = () => {
                     >
                       完了
                     </button>
-                    <button className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400">
+                    <button
+                      className="ml-2 px-2 py-1 rounded-full text-sm text-gray-50 bg-gray-400"
+                      onClick={(event) => onClickDelete(event, index)}
+                    >
                       削除
                     </button>
                   </div>

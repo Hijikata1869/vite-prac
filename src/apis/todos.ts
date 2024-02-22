@@ -1,8 +1,15 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 
-import { todosIndexUrl, todoCreateUrl, todoToggleCompletedUrl } from "../urls";
+// urls
+import {
+  todosIndexUrl,
+  todoCreateUrl,
+  todoDeleteUrl,
+  todoToggleCompletedUrl,
+} from "../urls";
 
-import { Todo } from "../types/Todo";
+// types
+import { Todo, CreateTodoResponse, DeleteTodoResponse } from "../types/Todo";
 
 export const fetchTodos = () => {
   return axios
@@ -15,20 +22,26 @@ export const fetchTodos = () => {
     });
 };
 
-interface CreateTodoResponse {
-  data: { message: string };
-  status: number;
-}
-
 export const createTodo = (todo: string) => {
   return axios
-    .post<CreateTodoResponse>(todoCreateUrl, {
+    .post(todoCreateUrl, {
       todo: todo,
     })
-    .then((res: AxiosResponse<CreateTodoResponse>) => {
+    .then((res): CreateTodoResponse => {
       return res;
     })
     .catch((e: AxiosError) => {
+      throw e;
+    });
+};
+
+export const deleteTodo = (todoId: number) => {
+  return axios
+    .delete(todoDeleteUrl(todoId))
+    .then((res): DeleteTodoResponse => {
+      return res;
+    })
+    .catch((e) => {
       throw e;
     });
 };
